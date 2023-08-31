@@ -2,11 +2,12 @@
 """Defines a function called filter_datum that returns a list of
 obfuscated log messages."""
 import re
+from typing import List
 
 
-def filter_datum(fields, redaction, message, separator):
-    """filters through a message that is supplied to it, and
-    it redacts the associated field with it"""
+def filter_datum(fields: List[str], redaction: str,
+                 message: str, separator: str) -> str:
+    """redacts sensitive information from a message"""
     for field in fields:
         pattern = fr'({ field.strip() }=)([^{separator}]+){separator}'
         message = re.sub(pattern, r'\1' + redaction + separator, message)
