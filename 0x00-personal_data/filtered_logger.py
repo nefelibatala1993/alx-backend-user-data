@@ -5,7 +5,9 @@ import logging
 import re
 from typing import List
 
+PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
 
+# The first task
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
     """redacts sensitive information from a message"""
@@ -15,6 +17,7 @@ def filter_datum(fields: List[str], redaction: str,
     return message
 
 
+# The Second Task
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
         """
@@ -34,3 +37,19 @@ class RedactingFormatter(logging.Formatter):
         redacted_msg = filter_datum(self.fields, self.REDACTION,
                                     msg, self.SEPARATOR)
         return redacted_msg
+
+
+# The third task
+def get_logger() -> logging.Logger:
+    """Creates a custom logger with a"""
+    logger = logging.getLogger('user_data')
+    logger.setLevel(logging.INFO)
+
+    # add the custom formatter
+    formatter = RedactingFormatter(list(PII_FIELDS))
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(logging.INFO)
+    stream_handler.setFormatter(formatter)
+
+    logger.addHandler(stream_handler)
+    return logger

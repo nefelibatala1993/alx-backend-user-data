@@ -5,3 +5,4 @@ main.py
 __pycache__
 logging_practice.py
 *.log
+*.csv
