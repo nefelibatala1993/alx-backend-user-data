@@ -5,7 +5,6 @@ import logging
 import re
 from os import environ
 import mysql.connector
-from mysql.connector.connection import MySQLConnection
 from typing import List
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
@@ -73,3 +72,20 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
                                                      host=host,
                                                      database=db_name)
     return cnx
+
+
+def main() -> None:
+    db = get_db()
+
+    cursor = db.cursor()
+    cursor.execute('SELECT * FROM users;')
+    logger = get_logger()
+    for row in cursor:
+        str_row = ''.join(f'{str(r)}; ' for r in row)
+        logger.info(str_row.strip())
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
