@@ -3,7 +3,7 @@
 obfuscated log messages."""
 import logging
 import re
-import os
+from os import environ
 import mysql.connector
 from mysql.connector.connection import MySQLConnection
 from typing import List
