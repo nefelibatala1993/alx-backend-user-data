@@ -3,14 +3,13 @@
 obfuscated log messages."""
 import logging
 import re
-from os import environ
+import os
 import mysql.connector
 from typing import List
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
 
 
-# The first task
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
     """redacts sensitive information from a message"""
@@ -20,7 +19,6 @@ def filter_datum(fields: List[str], redaction: str,
     return message
 
 
-# The Second Task
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
         """
@@ -42,7 +40,6 @@ class RedactingFormatter(logging.Formatter):
         return redacted_msg
 
 
-# The third task
 def get_logger() -> logging.Logger:
     """Creates a custom logger with a"""
     logger = logging.getLogger('user_data')
@@ -59,33 +56,41 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-# Third task
-def get_db() -> mysql.connector.connection.MySQLConnection:
-    """ Returns a connector to a MySQL database """
-    username = environ.get("PERSONAL_DATA_DB_USERNAME", "root")
-    password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
-    host = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
-    db_name = environ.get("PERSONAL_DATA_DB_NAME")
-
-    cnx = mysql.connector.connection.MySQLConnection(user=username,
-                                                     password=password,
-                                                     host=host,
-                                                     database=db_name)
-    return cnx
+def get_db() -> mysql.connector.connection.MYSQLConnection:
+    """ Connection to MySQL environment """
+    db_connect = mysql.connector.connect(
+        user=os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
+        password=os.getenv('PERSONAL_DATA_DB_PASSWORD', ''),
+        host=os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
+        database=os.getenv('PERSONAL_DATA_DB_NAME')
+    )
+    return db_connect
 
 
 def main() -> None:
-    """ The main function """
+    """Obtain a database connection using get_db,
+    retrieve all roles in the users table, and display
+    each row under a formatted log message.
+    """
     db = get_db()
 
-    cursor = db.cursor()
-    cursor.execute('SELECT * FROM users;')
-    logger = get_logger()
-    for row in cursor:
-        str_row = ''.join(f'{str(r)}; ' for r in row)
-        logger.info(str_row.strip())
-    cursor.close()
-    db.close()
+    try:
+        with db.cursor() as cursor:
+            cursor.execute("SELECT * FROM users;")
+            headers = [field[0] for field in cursor.description]
+
+            logger = get_logger()
+
+            for row in cursor:
+                info_answer = ' '.join([f'{p}={f};' for f, p in zip(row, headers)])
+                logger.info(info_answer)
+
+    except mysql.connector.Error as err:
+        # Handle database errors
+        logger.error(f"Database error: {err}")
+
+    finally:
+        db.close()
 
 
 if __name__ == "__main__":
