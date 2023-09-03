@@ -6,3 +6,4 @@ __pycache__
 logging_practice.py
 *.log
 *.csv
+*.sql

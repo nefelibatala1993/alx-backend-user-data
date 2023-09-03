@@ -3,6 +3,10 @@
 obfuscated log messages."""
 import logging
 import re
+import os
+import mysql.connector
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.connection import Error
 from typing import List
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
@@ -55,3 +59,19 @@ def get_logger() -> logging.Logger:
 
     logger.addHandler(stream_handler)
     return logger
+
+
+def get_db() -> MySQLConnection:
+    """returns a connector to the database"""
+    hostname = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
+    username = os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
+    passwd = os.environ.get('PERSONAL_DATA_DB_PASSWORD', '')
+    db = os.environ.get('PERSONAL_DATA_DB_NAME')
+
+    connection = mysql.connector.connect(
+            host=hostname,
+            database=db,
+            user=username,
+            password=passwd
+    )
+    return connection
