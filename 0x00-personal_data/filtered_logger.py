@@ -75,6 +75,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 
 def main() -> None:
+    """ The main function """
     db = get_db()
 
     cursor = db.cursor()
