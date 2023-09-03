@@ -6,7 +6,6 @@ import re
 import os
 import mysql.connector
 from mysql.connector.connection import MySQLConnection
-from mysql.connector.connection import Error
 from typing import List
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
@@ -62,7 +61,7 @@ def get_logger() -> logging.Logger:
 
 
 # Third task
-def get_db() -> MySQLConnection | None:
+def get_db() -> MySQLConnection:
     """returns a connector to the database"""
     hostname = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
     username = os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
