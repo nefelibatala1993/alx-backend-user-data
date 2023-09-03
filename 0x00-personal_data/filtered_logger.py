@@ -69,13 +69,10 @@ def get_db() -> MySQLConnection | None:
     passwd = os.environ.get('PERSONAL_DATA_DB_PASSWORD', '')
     db = os.environ.get('PERSONAL_DATA_DB_NAME')
 
-    try:
-        connection = mysql.connector.connect(
+    connection = mysql.connector.connect(
             host=hostname,
             database=db,
             user=username,
             password=passwd
-        )
-    except Error as e:
-        return None
+    )
     return connection
