@@ -23,7 +23,9 @@ if auth_type == 'auth':
 
 @app.before_request
 def before_request_func():
-    print('this is executed before each request')
+    excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+    if auth is not None:
+        ...
 
 
 @app.errorhandler(404)
