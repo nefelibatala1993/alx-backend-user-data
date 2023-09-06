@@ -25,7 +25,8 @@ elif auth_type == 'basic_auth':
 
 @app.before_request
 def before_request_func():
-    excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+    excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/',
+                    '/api/v1/forbidden/']
     if auth is not None:
         if auth.require_auth(request.path, excluded_paths):
             if auth.authorization_header(request) is None:
@@ -45,13 +46,13 @@ def not_found(error) -> str:
 def unauthorized_access(error) -> str:
     """ Unauthorized access handler
     """
-    return jsonify({ "error": "unauthorized" }), 401
+    return jsonify({"error": "unauthorized"}), 401
 
 
 @app.errorhandler(403)
-def forbidden_access(error):
+def forbidden_access(error) -> str:
     """ Forbidden access handler"""
-    return jsonify({ "error": "Forbidden" }), 403
+    return jsonify({"error": "Forbidden"}), 403
 
 
 if __name__ == "__main__":
