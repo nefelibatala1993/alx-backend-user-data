@@ -33,4 +33,3 @@ def unauthorized() -> str:
         - abort(401)
     """
     abort(401)
-    
