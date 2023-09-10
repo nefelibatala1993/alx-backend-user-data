@@ -5,6 +5,7 @@ from typing import List
 
 
 class Auth:
+    """Authentication class for authentication of users to the API"""
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Require authentication for all routes except excluded_paths"""
         return False
