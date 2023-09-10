@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Authentication for the API"""
-from flask import request
+from flask import request, Request
 from typing import List
 
 
@@ -19,9 +19,12 @@ class Auth:
             return False
         return True
 
-    def authorization_header(self, request=None) -> str:
+    def authorization_header(self, request: Request = None) -> str:
         """Return the value of the header request Authorization"""
-        return None
+        if request is None or request.headers.get('Authorization') is None:
+            return None
+
+        return request.headers.get('Authorization')
 
     def current_user(self, request=None) -> str:
         """Returns the current use that is authenticated"""
