@@ -21,7 +21,9 @@ if AUTH_TYPE == 'auth':
 
 
 @app.before_request
-def filter_request():
+def filter_request() -> None:
+    """Filters incoming requests if they require
+    authentication"""
     if auth is None:
         return
 
