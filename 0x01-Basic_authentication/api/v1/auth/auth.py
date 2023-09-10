@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Authentication for the API"""
-from flask import request, Request
+from flask import request
 from typing import List
 
 
