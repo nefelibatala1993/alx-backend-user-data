@@ -22,7 +22,7 @@ elif AUTH_TYPE == 'basic_auth':
 
 
 @app.before_request
-def filter_request() -> None:
+def before_request() -> None:
     """Filters incoming requests if they require
     authentication"""
     if auth is None:
@@ -39,9 +39,11 @@ def filter_request() -> None:
     if auth.authorization_header(request) is None:
         abort(401)
 
-    if auth.current_user(request) is None:
+    current_user = auth.current_user(request)
+    if current_user is None:
         abort(403)
-    request.current_use = auth.current_user(request)
+
+    request.current_user = current_user # Assigning the current user
 
 
 @app.errorhandler(404)
