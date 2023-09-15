@@ -43,7 +43,7 @@ def before_request() -> None:
     if current_user is None:
         abort(403)
 
-    request.current_user = current_user # Assigning the current user
+    request.current_user = current_user  # Assigning the current user
 
 
 @app.errorhandler(404)
