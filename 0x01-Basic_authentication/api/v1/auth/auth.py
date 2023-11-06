@@ -3,6 +3,7 @@
 the authentication of users for the api
 """
 from flask import request
+from typing import List, TypeVar
 
 
 class Auth:
