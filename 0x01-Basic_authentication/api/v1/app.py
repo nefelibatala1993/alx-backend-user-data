@@ -22,6 +22,7 @@ if AUTH_TYPE == 'auth':
 
 @app.before_request
 def authenticate():
+    """Authenticates if there is an env variable set"""
     if auth is None:
         return None
 
