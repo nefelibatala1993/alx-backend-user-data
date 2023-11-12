@@ -2,6 +2,7 @@
 """Defines the Auth class that handles the
 the authentication of users for the api
 """
+from os import getenv
 from flask import request
 from typing import List, TypeVar
 
@@ -38,3 +39,17 @@ class Auth:
         """Gets the current user that is authenticated
         """
         return None
+
+    def session_cookie(self, request=None):
+        """Returns a cookie value from a request"""
+        if request is None:
+            return None
+
+        SESSION_NAME = getenv('SESSION_NAME', None)
+        if SESSION_NAME is None:
+            return None
+        
+        cookie = request.cookies.get(SESSION_NAME, None)
+        if cookie is None:
+            return None
+        return cookie
