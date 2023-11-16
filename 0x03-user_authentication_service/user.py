@@ -1,18 +1,14 @@
 #!/usr/bin/env python3
-"""Defines the User class which will model users in the DB
-"""
+"""Class User for ORM"""
+
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-
-
 Base = declarative_base()
 
 
 class User(Base):
-    """Defines the model for the user in the DB
-    """
+    """Representation of a user """
     __tablename__ = 'users'
-
     id = Column(Integer, primary_key=True)
     email = Column(String(250), nullable=False)
     hashed_password = Column(String(250), nullable=False)
